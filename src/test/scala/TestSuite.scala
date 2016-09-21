@@ -12,8 +12,17 @@ class TestSuite extends FunSuite {
   test("General") {
     import Hearts._
     val deck = new Deck
-    val hands = deck.deal
-    println(hands)
+    println(deck.deal)
+    println(deck.deal)
+  }
+
+  test("Taker") {
+    import Hearts._
+    val cards = List(Card("S12"),Card("SA"),Card("H13"),Card("D2"))
+    assert(Trick(cards,leader=0).taker == 1)
+    assert(Trick(cards,leader=1).taker == 1)
+    assert(Trick(cards,leader=2).taker == 2)
+    assert(Trick(cards,leader=3).taker == 3)
   }
 
 }

@@ -9,6 +9,7 @@ case class Card(card: String) { // Suit + Value
     case "J" => 11
     case "Q" => 12
     case "K" => 13
+    case "A" => 14
     case s: String => s.toInt
   }
 

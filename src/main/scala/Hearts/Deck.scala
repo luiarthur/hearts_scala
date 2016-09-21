@@ -3,8 +3,8 @@ package Hearts
 // Assume 4 players & 1 deck
 class Deck(val seed: Int = 0)  {
 
-  scala.util.Random.setSeed(0)
   val Rand = scala.util.Random
+  Rand.setSeed(seed)
 
   private val suits = 
     List("S","H","C","D") // spade, heart, club, diamond
@@ -24,6 +24,14 @@ class Deck(val seed: Int = 0)  {
 }
 
 /* In file testing:
-   val deck = new Deck
-   val hands = deck.deal
+    import Hearts._
+    import ORF.models.timer
+    val deck = new Deck
+    val hands = deck.deal
+
+    val cards = List(Card("S12"),Card("SA"),Card("H13"),Card("D2"))
+    timer { Trick(cards,leader=0).taker }
+    timer { Trick(cards,leader=1).taker }
+    timer { Trick(cards,leader=2).taker }
+    timer { Trick(cards,leader=3).taker }
  */
