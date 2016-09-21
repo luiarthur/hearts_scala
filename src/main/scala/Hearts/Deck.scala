@@ -1,10 +1,7 @@
 package Hearts
 
 // Assume 4 players & 1 deck
-class Deck(val seed: Int = 0)  {
-
-  val Rand = scala.util.Random
-  Rand.setSeed(seed)
+class Deck {
 
   private val suits = 
     List("S","H","C","D") // spade, heart, club, diamond
@@ -16,11 +13,10 @@ class Deck(val seed: Int = 0)  {
     for (suit <- suits; value <- values) yield Card(suit + value)
 
   private val nCardsPerPlayer = 13
-  private def shuffle = Rand.shuffle(cards)
+  private def shuffle = scala.util.Random.shuffle(cards)
 
-  def deal = shuffle.
-               grouped(nCardsPerPlayer).
-               map(g => g.groupBy(_.suit)).toList
+  def deal = 
+    shuffle.grouped(nCardsPerPlayer).toList.map{l=>l.sortBy(_.card)}
 }
 
 /* In file testing:
