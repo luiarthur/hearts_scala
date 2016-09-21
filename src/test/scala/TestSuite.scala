@@ -9,4 +9,11 @@ class TestSuite extends FunSuite {
     assert(true)
   }
 
+  test("General") {
+    import Hearts._
+    val deck = new Deck
+    val hands = deck.deal
+    println(hands)
+  }
+
 }
