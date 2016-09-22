@@ -2,6 +2,7 @@ import org.scalatest.FunSuite
 
 class TestSuite extends FunSuite {
 
+  import ORF.models.timer
   def round(x: Double, d: Int = 3) = 
     (scala.math.pow(10,d) * x).toInt / scala.math.pow(10,d)
 
@@ -52,7 +53,19 @@ class TestSuite extends FunSuite {
   }
 
   test("Random Game") {
-    //val randGame = new RandomGame
+    println
+    val newRound = new Round
+    timer { for (i <- 1 to 100) newRound.simulate }
+    val sim = newRound.simulate
+    println
+    println(sim._1)
+    println
+    println(sim._2)
+
+    println(sim._1.flatten.toList.size)
+    println(sim._1.flatten.toSet.size)
+    println(sim._2.flatten.toList.size)
+    println(sim._2.flatten.toSet.size)
   }
 
 
