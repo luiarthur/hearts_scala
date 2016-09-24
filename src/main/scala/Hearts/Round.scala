@@ -16,6 +16,7 @@ package Hearts
 
   trick number = {1,...,13}
  */
+
 class Round {
   val deck = new Deck
   type LLCards = List[List[Card]]
