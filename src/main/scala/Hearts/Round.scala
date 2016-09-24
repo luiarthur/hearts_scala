@@ -1,5 +1,21 @@
 package Hearts
 
+/*
+ y_i = f(x_i),
+
+ where x_i: 52+1+1 vector
+ 
+ Computer is player j
+ 52 cards => value: -4,-3,-2,-1,0,1,2,3,4,5
+ -j -> played by player j
+  0 -> unseen card
+ +j -> player j played this card in current trick
+  5 -> I, player 1, have the card
+
+  leader: {1,2,3,4}
+
+  trick number = {1,...,13}
+ */
 class Round {
   val deck = new Deck
   type LLCards = List[List[Card]]
