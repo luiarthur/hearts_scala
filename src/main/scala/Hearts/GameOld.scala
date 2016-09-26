@@ -1,6 +1,6 @@
 package Hearts
 
-object Game {
+object GameOld {
   val deck = new Deck
 
   def apply() = {
@@ -8,11 +8,11 @@ object Game {
     val ldr = 
       deck.deal.zipWithIndex.filter(_._1 contains Card("C2")).head._2
 
-    new Game(deck.deal, List.fill(4)(List[Card]()), ldr, false, 0)
+    new GameOld(deck.deal, List.fill(4)(List[Card]()), ldr, false, 0)
   }
 }
 
-class Game (val hands: List[List[Card]], 
+class GameOld (val hands: List[List[Card]], 
             val played: List[List[Card]],
             val leader: Int,
             val brokenHearts: Boolean,
@@ -48,11 +48,11 @@ class Game (val hands: List[List[Card]],
     }
   }
 
-  def randGame: Game = if (endOfGame) this else randTrick
+  def randGame: GameOld = if (endOfGame) this else randTrick
 
 
   // need to redo this sequentially!
-  def randTrick: Game = {
+  def randTrick: GameOld = {
 
     val idx = List(0,1,2,3)
 
@@ -75,6 +75,6 @@ class Game (val hands: List[List[Card]],
 
     val newTrickNum = trickNum + 1
 
-    new Game(newHands,newPlayed,newLeader,newBrokenHearts,newTrickNum)
+    new GameOld(newHands,newPlayed,newLeader,newBrokenHearts,newTrickNum)
   }
 }

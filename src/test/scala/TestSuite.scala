@@ -52,15 +52,23 @@ class TestSuite extends FunSuite {
     //assert(Trick(cards,leader=3).taker == 3)
   }
 
-  //test("Random Game") {
-  //  println
-  //  val newGame = Game()
-  //  val g = newGame.randGame
-  //  println("HANDS:")
-  //  g.hands.foreach{i => println(i.sortBy(_.card))}
-  //  println(g.hands.map(_.size))
-  //  println("Played:")
-  //  g.played.foreach{println}
-  //}
+  test("Random Game") {
+    println
+    msg("Random Game")
+    msg("starting hand:")
+    val newGame = Game()
+    //newGame.hands.foreach{i => println(i.sortBy(_.card))}
+    newGame.hands.foreach{println}
+    val g = newGame.randGame()
+    msg("ending hands:")
+    g.hands.foreach{i => println(i.sortBy(_.card))}
+    assert(g.hands.map(_.size) == List(0,0,0,0))
+    msg("Cards Played:")
+    g.played.foreach{println}
+    assert(g.trickNum == 13)
+    assert(g.brokenHearts)
+    msg("last leader: " + g.leader)
+    println
+  }
 
 }
