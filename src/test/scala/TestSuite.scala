@@ -52,27 +52,15 @@ class TestSuite extends FunSuite {
     //assert(Trick(cards,leader=3).taker == 3)
   }
 
-  if (false)
-  test("Random Round") {
-    println
-    val newRound = new Round
-    timer { for (i <- 1 to 100) newRound.simulate }
-    val sim = newRound.simulate
-    println
-    println(sim._1)
-    println
-    println(sim._2)
-
-    println(sim._1.flatten.toList.size)
-    println(sim._1.flatten.toSet.size)
-    println(sim._2.flatten.toList.size)
-    println(sim._2.flatten.toSet.size)
-  }
-  
-  test("Random Game") {
-    println
-    val newGame = Game()
-    //val g = newGame.randGame
-  }
+  //test("Random Game") {
+  //  println
+  //  val newGame = Game()
+  //  val g = newGame.randGame
+  //  println("HANDS:")
+  //  g.hands.foreach{i => println(i.sortBy(_.card))}
+  //  println(g.hands.map(_.size))
+  //  println("Played:")
+  //  g.played.foreach{println}
+  //}
 
 }
