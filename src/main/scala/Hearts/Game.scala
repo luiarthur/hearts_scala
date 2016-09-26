@@ -7,21 +7,22 @@ object Game {
     val hands = deck.deal
     //                                  hand                           index
     val ldr = hands.zipWithIndex.filter(_._1 contains Card("C2")).head._2
-    new Game(hands, List.fill(4)(List[Card]()), ldr, false, 0)
+    val ldrs = List(ldr)
+    new Game(hands, List.fill(4)(List[Card]()), ldrs, false, 0)
   }
 }
 
 class Game(val hands: List[List[Card]], 
            val played: List[List[Card]],
-           val leader: Int,
+           val leaders: List[Int],
            val brokenHearts: Boolean,
            val trickNum: Int) {
 
   val idx = List(0,1,2,3)
+  val leader = leaders.head
   private var _brokenHearts = brokenHearts
   private var _leadSuit = '_'
 
-  println(leader)
   def endOfGame = trickNum == 13
   def shortSuited(player: Int, suit: Char) = 
     hands(player).count(_.suit==suit) == 0
@@ -53,7 +54,7 @@ class Game(val hands: List[List[Card]],
       if (shortSuited(player,_leadSuit)) {
         // if short-suited, play any card
         val out = hands(player).head
-        if (!_brokenHearts) _brokenHearts = true
+        if (!_brokenHearts && out.suit=='H') _brokenHearts = true
         out
       } else {
         // else play in suit
@@ -87,6 +88,6 @@ class Game(val hands: List[List[Card]],
 
     val newTrickNum = trickNum + 1
 
-    new Game(newHands,newPlayed,newLeader,_brokenHearts,newTrickNum)
+    new Game(newHands,newPlayed,newLeader::leaders,_brokenHearts,newTrickNum)
   }
 }

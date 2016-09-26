@@ -60,14 +60,26 @@ class TestSuite extends FunSuite {
     //newGame.hands.foreach{i => println(i.sortBy(_.card))}
     newGame.hands.foreach{println}
     val g = newGame.randGame()
-    msg("ending hands:")
-    g.hands.foreach{i => println(i.sortBy(_.card))}
+    assert(g.hands == List(List(),List(),List(),List()))
     assert(g.hands.map(_.size) == List(0,0,0,0))
-    msg("Cards Played:")
-    g.played.foreach{println}
     assert(g.trickNum == 13)
     assert(g.brokenHearts)
-    msg("last leader: " + g.leader)
+    msg("leaders: " + g.leaders)
+    println
+    print(Console.CYAN+ "Playback (")
+    print(Console.YELLOW + "Leaders, " + Console.RED + "Takers")
+    println(Console.CYAN + ")" + Console.RESET)
+    for (i <- List.range(12,-1,-1)) {
+      for (j <- 0 to 3) {
+        val col = if (g.leaders(i) == j) {
+          Console.RED 
+        } else if (g.leaders(i+1) == j) {
+          Console.YELLOW
+        } else Console.RESET
+        print(col + j.toString + ": " + g.played(j)(i) + "\t" + Console.RESET)
+      }
+      println
+    }
     println
   }
 
