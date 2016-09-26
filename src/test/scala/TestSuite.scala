@@ -82,5 +82,11 @@ class TestSuite extends FunSuite {
     }
     println
   }
+  
+  test("Train") {
+    val newGame = Game()
+    val randGame = newGame.randGame()
+    val leaders = randGame.leaders.tail
 
+  }
 }
