@@ -18,16 +18,19 @@ class Game (val hands: List[List[Card]],
             val brokenHearts: Boolean,
             val trickNum: Int) {
   type LLC = List[List[Card]]
-  import scala.util.Random.shuffle
 
-  val leadSuit = played(leader).head.suit
+  val leadSuit = if (trickNum==0) 'C' else hands(leader).head.suit
   def endOfGame = trickNum == 13
   def shortSuited(player: Int, suit: Char) = 
     hands(player).count(_.suit==suit) == 0
 
   def randCard(player: Int) = {
     if (player == leader) {
-      if (brokenHearts || shortSuited(player,'H')) {
+      if (trickNum==0) {
+        println("leader: "+leader)
+        // play 2 of Clubs
+        Card("C2")
+      } else if (brokenHearts || shortSuited(player,'H')) {
         // play a random card
         hands(player).head
       } else {
@@ -50,15 +53,13 @@ class Game (val hands: List[List[Card]],
 
   // need to redo this sequentially!
   def randTrick: Game = {
-    val idx = leader match {
-      case 0 => List(0,1,2,3)
-      case 1 => List(1,2,3,0)
-      case 2 => List(2,3,1,0)
-      case 3 => List(3,0,1,2)
-    }
 
-    val cardsInCurrTrick = idx map { i => randCard(i) }
+    val idx = List(0,1,2,3)
 
+    val cardsInCurrTrick = idx map randCard
+    println(cardsInCurrTrick)
+
+    //val 
     val newHands = idx map {i =>
       hands(i) filterNot { _ == cardsInCurrTrick(i) }
     }
@@ -68,8 +69,10 @@ class Game (val hands: List[List[Card]],
 
     val newLeader = cardsInCurrTrick.zip(idx).
                       filter(_._1.suit==leadSuit).maxBy(_._1.value)._2
+
     val newBrokenHearts = 
       brokenHearts || cardsInCurrTrick.count(_.suit=='H') > 0
+
     val newTrickNum = trickNum + 1
 
     new Game(newHands,newPlayed,newLeader,newBrokenHearts,newTrickNum)
