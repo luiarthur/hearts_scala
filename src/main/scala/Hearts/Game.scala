@@ -17,6 +17,7 @@ class Game(val hands: List[List[Card]],
            val leaders: List[Int],
            val brokenHearts: Boolean,
            val trickNum: Int) {
+  val deck = new Deck
 
   val idx = List(0,1,2,3)
   val leader = leaders.head
@@ -89,5 +90,76 @@ class Game(val hands: List[List[Card]],
     val newTrickNum = trickNum + 1
 
     new Game(newHands,newPlayed,newLeader::leaders,_brokenHearts,newTrickNum)
+  }
+
+  def playBack = {
+    print(Console.CYAN+ "Playback (")
+    print(Console.YELLOW + "Leaders, " + Console.RED + "Takers")
+    println(Console.CYAN + ")" + Console.RESET)
+    for (i <- (0 to 12).toList.reverse) {
+      for (j <- 0 to 3) {
+        val col = if (leaders(i) == j) {
+          Console.RED 
+        } else if (leaders(i+1) == j) {
+          Console.YELLOW
+        } else Console.RESET
+        print(col + j.toString + ": " + played(j)(i) + "\t" + Console.RESET)
+      }
+      println
+    }
+  }
+
+  private def trick(i: Int) = played map { l => l(12-i) }
+  private def pointInTrick(i: Int) = 
+    trick(i).count(_.suit == 'H') + trick(i).count(_.card == "SQ") * 13
+
+  /* List takers in order */
+  def takers = {
+    assert(endOfGame,"This is only done at end of game")
+    leaders.reverse.tail
+  }
+
+
+  /* List points taken in each trick in order */
+  def points = {
+    assert(endOfGame,"This is only done at end of game")
+    val out = for (i <- List.range(0,13)) yield pointInTrick(i) 
+    assert(out.sum == 26, "Points don't sum to 26!!!")
+    out
+  }
+
+  // generate x vector for trick t
+  def genx(t: Int) = {
+    val x = Array.fill(54)(0)
+    x(52) = t // trick number
+    x(53) = leaders(t) // leaders
+    var i = 0
+    for (c <- deck.cards) {
+      x(i) = 
+        if (played(0) contains c) {
+          -1 
+        } else if (played(1) contains c) {
+          -2
+        } else if (played(2) contains c) {
+          -3
+        } else if (played(3) contains c) {
+          -4
+        } else if (hands(0) contains c) {
+          1
+        } else if (hands(1).head == c) {
+          2
+        } else if (hands(2).head == c) {
+          3
+        } else if (hands(3).head == c) {
+          4
+        } else 0
+      i += 1
+    }
+    x.toVector
+  }
+
+  def genX = {
+    assert(endOfGame,"This is only done at end of game")
+    for (t <- 0 until 13) yield genx(t)
   }
 }

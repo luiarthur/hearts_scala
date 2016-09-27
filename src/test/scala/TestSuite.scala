@@ -65,28 +65,26 @@ class TestSuite extends FunSuite {
     assert(g.trickNum == 13)
     assert(g.brokenHearts)
     msg("leaders: " + g.leaders)
-    println
-    print(Console.CYAN+ "Playback (")
-    print(Console.YELLOW + "Leaders, " + Console.RED + "Takers")
-    println(Console.CYAN + ")" + Console.RESET)
-    for (i <- List.range(12,-1,-1)) {
-      for (j <- 0 to 3) {
-        val col = if (g.leaders(i) == j) {
-          Console.RED 
-        } else if (g.leaders(i+1) == j) {
-          Console.YELLOW
-        } else Console.RESET
-        print(col + j.toString + ": " + g.played(j)(i) + "\t" + Console.RESET)
-      }
-      println
-    }
-    println
+    g.playBack
   }
   
   test("Train") {
-    val newGame = Game()
-    val randGame = newGame.randGame()
+    //implicit class Hands(llc: List[List[Card]]) {
+    //  def trick(i: Int) = llc map {l => l(i)}
+    //}
+    println
+    val randGame = Game().randGame()
     val leaders = randGame.leaders.tail
+    val played = randGame.played
+    randGame.playBack
+    assert({leaders.size :: played.map(_.size)}.toSet.size==1)
+    val points = randGame.points
+    val takers = randGame.takers
+    println("Points: " + points)
+    println("Takers: " + takers)
 
+    val y = points
+    val x = randGame.genX
+    // ORF STUFF?
   }
 }
