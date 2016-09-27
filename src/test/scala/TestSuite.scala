@@ -92,7 +92,7 @@ class TestSuite extends FunSuite {
     val xrng = dataRange(rng52 ++ Vector(Vector(0.0,13.0),Vector(0.0,3.0)) )
     val param = Param(minSamples=100,minGain=0,maxDepth=15,xrng=xrng)
     val orf = RegForest(param,numTrees=15,par=true)
-    val n = 5000
+    val n = 1000
     for (i <- 1 to n) {
       print("\rIteration: " + i + "/" + n)
       val randGame = game.randGame()
@@ -106,5 +106,9 @@ class TestSuite extends FunSuite {
     println
     println("Mean num Leaves: " + orf.meanNumLeaves)
     // ORF STUFF?
+    val testGame = {Game()}.randGame()
+    println("Prediction: " + orf.predicts(testGame.genX.toVector))
+    println(testGame.points)
+    println(testGame.takers)
   }
 }

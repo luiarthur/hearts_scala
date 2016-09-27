@@ -1,14 +1,16 @@
 package Hearts
 
+
+import ORF.models._
 object Game {
   val deck = new Deck
 
-  def apply() = {
+  def apply(orf: RegTree = null) = {
     val hands = deck.deal
     //                                  hand                           index
     val ldr = hands.zipWithIndex.filter(_._1 contains Card("C2")).head._2
     val ldrs = List(ldr)
-    new Game(hands, List.fill(4)(List[Card]()), ldrs, false, 0)
+    new Game(hands, List.fill(4)(List[Card]()), ldrs, false, 0, orf)
   }
 }
 
@@ -16,7 +18,8 @@ class Game(val hands: List[List[Card]],
            val played: List[List[Card]],
            val leaders: List[Int],
            val brokenHearts: Boolean,
-           val trickNum: Int) {
+           val trickNum: Int,
+           val orf: RegTree) {
   val deck = new Deck
 
   val idx = List(0,1,2,3)
@@ -89,7 +92,7 @@ class Game(val hands: List[List[Card]],
 
     val newTrickNum = trickNum + 1
 
-    new Game(newHands,newPlayed,newLeader::leaders,_brokenHearts,newTrickNum)
+    new Game(newHands,newPlayed,newLeader::leaders,_brokenHearts,newTrickNum, orf)
   }
 
   def playBack = {
@@ -128,7 +131,7 @@ class Game(val hands: List[List[Card]],
     out
   }
 
-  // generate x vector for trick t
+  // generate x vector for trick t // FIXME. is this right?
   def genx(t: Int) = {
     val x = Array.fill(54)(0.0)
     x(52) = t // trick number
@@ -138,19 +141,19 @@ class Game(val hands: List[List[Card]],
       x(i) = 
         if (played(0) contains c) {
           -1 
-        } else if (played(1) contains c) {
+        } else if (played(1).drop(12-t) contains c) {
           -2
-        } else if (played(2) contains c) {
+        } else if (played(2).drop(12-t) contains c) {
           -3
-        } else if (played(3) contains c) {
+        } else if (played(3).drop(12-t) contains c) {
           -4
-        } else if (hands(0) contains c) {
+        } else if (played(0).take(t+1) contains c) {
           1
-        } else if (hands(1).head == c) {
+        } else if (played(1).take(t+1).head == c) {
           2
-        } else if (hands(2).head == c) {
+        } else if (played(2).take(t+1).head == c) {
           3
-        } else if (hands(3).head == c) {
+        } else if (played(3).take(t+1).head == c) {
           4
         } else 0
       i += 1
@@ -161,5 +164,9 @@ class Game(val hands: List[List[Card]],
   def genX = {
     assert(endOfGame,"This is only done at end of game")
     for (t <- 0 until 13) yield genx(t)
+  }
+
+  def smartCard = { // play a smart card if player 0
+    ???
   }
 }
