@@ -130,7 +130,7 @@ class Game(val hands: List[List[Card]],
 
   // generate x vector for trick t
   def genx(t: Int) = {
-    val x = Array.fill(54)(0)
+    val x = Array.fill(54)(0.0)
     x(52) = t // trick number
     x(53) = leaders(t) // leaders
     var i = 0

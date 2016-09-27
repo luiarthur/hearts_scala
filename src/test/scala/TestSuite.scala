@@ -84,7 +84,27 @@ class TestSuite extends FunSuite {
     println("Takers: " + takers)
 
     val y = points
-    val x = randGame.genX
+    val X = randGame.genX
+
+    val game = Game()
+    import ORF.models._
+    val rng52 = Vector.fill(52)(Vector(-4.0,4.0))
+    val xrng = dataRange(rng52 ++ Vector(Vector(0.0,13.0),Vector(0.0,3.0)) )
+    val param = Param(minSamples=100,minGain=0,maxDepth=15,xrng=xrng)
+    val orf = RegForest(param,numTrees=15,par=true)
+    val n = 5000
+    for (i <- 1 to n) {
+      print("\rIteration: " + i + "/" + n)
+      val randGame = game.randGame()
+      val y = randGame.points
+      val X = randGame.genX
+      assert(y.size == X.size)
+      for (j <- 0 until y.size) {
+        orf.update(X(j),y(j))
+      }
+    }
+    println
+    println("Mean num Leaves: " + orf.meanNumLeaves)
     // ORF STUFF?
   }
 }
